@@ -41,7 +41,6 @@
         <section class="content">
           <div class="callout callout-info">
               <center><h2>Importar BD </h2></center>
-
             <p></p>
           </div>
           <br>
@@ -52,10 +51,23 @@
               </div>
             </div>
             <br>
+
             <div class="box-body">
-             <center> <form name="formulario" method="post" action="/send.php" enctype="multipart/form-data">
-                  <input type="file" name="adjunto" ></center>
+              <form method="POST" action="{{ route('save') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <input type="file" class="form-control" name="file" >
+                  </div>
+                </div>
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                  <button type="submit" class="btn btn-primary">Enviar</button>
+                </div>
+              </div>
               </form>
+            </div>
+                  <inputto" >
             </div>
           </div>
           <!-- /.box -->
