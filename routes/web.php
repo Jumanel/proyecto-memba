@@ -13,5 +13,5 @@
 
 Route::get('/', "InicioController@index");
 
-Route::get('formulario', 'StorageController@index');
-Route::post('storage/create', 'StorageController@save')->name('save');
+//Route::get('formulario', 'StorageController@index');
+Route::post('storage', 'StorageController@save')->name('save');

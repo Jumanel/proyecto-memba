@@ -39,10 +39,12 @@
       <div class="content-wrapper">
           <!-- Content Header (Page header) -->
         <section class="content">
-          <div class="callout callout-info">
-              <center><h2>Importar BD </h2></center>
-            <p></p>
-          </div>
+            @if(isset($status))
+              <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <h4><i class="icon fa fa-check"></i>{{$status}}</h4>
+              </div>
+            @endif
           <br>
           <div class="box">
             <div class="box-header with-border">
@@ -57,12 +59,12 @@
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                   <div class="col-md-6">
-                    <input type="file" class="form-control" name="file" >
+                    <input type="file" class="form-control" name="file" required="" >
                   </div>
                 </div>
               <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
-                  <button type="submit" class="btn btn-primary">Enviar</button>
+                  <button type="submit" class="btn btn-primary">guardar</button>
                 </div>
               </div>
               </form>

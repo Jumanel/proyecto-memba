@@ -18,8 +18,8 @@ class StorageController extends Controller
        //indicamos que queremos guardar un nuevo archivo en el disco local
        \Storage::disk('local')->put($nombre,  \File::get($file));
 
-       return "archivo guardado";
-       //return view('inicio')
+       //return "archivo guardado";
+       return view('inicio')->with('status','guardado');
 
 }
 
