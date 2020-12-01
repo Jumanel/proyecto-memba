@@ -15,3 +15,4 @@ Route::get('/', "InicioController@index");
 
 //Route::get('formulario', 'StorageController@index');
 Route::post('storage', 'StorageController@save')->name('save');
+
