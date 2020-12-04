@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title> PP - Meemba</title>
+    
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -39,13 +40,40 @@
       <div class="content-wrapper">
           <!-- Content Header (Page header) -->
         <section class="content">
-            @if(isset($status))
+           
+           
+            @if(empty($status))
+             
               <div class="alert alert-success alert-dismissible">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <h4><i class="icon fa fa-check"></i>{!!$status!!}</h4>
+                <h4><i class="icon fa fa-check"></i>
               </div>
+            
+            @else
+            
+            <div class="alert alert-warning" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <center> <h2> <i class="fa fa-exclamation-triangle"> </i> </h2></center>
+            <br>
+           <h4> </i>{!!$status!!}</h4>
+            </div> 
+            
             @endif
+            
+            
+   
+            @if(isset($mensajeno))
+            
+             <div class="alert alert-danger" role="alert">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="fa fa-ban"></i>{!!$mensajeno!!}</h4>
+            </div>
+            @endif 
+
+             
+            
           <br>
+            <h1><center><b>IMPORTAR BD</b></center></h1>
           <div class="box">
             <div class="box-header with-border">
               <center><h3 class="box-title"> Seleccione su Base de Datos SQLite</h3></center>
@@ -54,21 +82,47 @@
             </div>
             <br>
 
-            <div class="box-body">
-              <form method="POST" action="{{ route('save') }}" accept-charset="UTF-8" enctype="multipart/form-data">
+          <div class="box-body">
+               <form method="POST" action="{{ route('save') }}" accept-charset="UTF-8" enctype="multipart/form-data"> 
               <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                <div class="form-group">
-                  <div class="col-md-6">
-                    <input type="file" class="form-control" name="file" required="" >
+                
+                 <div class="form-group">
+                  <div class="col-md-6" >
+                      <input class="form-control" type="file" name="file" required="" >
                   </div>
                 </div>
+            
+                
+                <style>
+                    .form-group{
+                    margin: 0 0 1rem;
+                    height: 5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    }
+                </style>
+                
+            
               <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
-                  <button type="submit" class="btn btn-primary">guardar</button>
+                  <button type="submit" class="btn btn-primary">Verificar</button>
                 </div>
               </div>
+              
+             
+    
+                   
+                   
+                
+              
+              
+              
               </form>
             </div>
+                 
+                 
+                 
                   <inputto" >
             </div>
           </div>

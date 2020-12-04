@@ -19,33 +19,39 @@ class StorageController extends Controller
        \Storage::disk('local')->put($nombre,  \File::get($file));
        try {
 		    //Comprobar que es SQLite
-		    $nombre = "F:\\laragon\\www\\memba\\storage\\storage\\".$nombre;
+		    $nombre = "c:\\laragon\\www\\proyecto-memba\\storage\\storage\\".$nombre;
 
 		    $conexionBD = new \SQLite3($nombre,SQLITE3_OPEN_READWRITE );
    		    $conexionBD->enableExceptions(true);
 
 		    $errores = "";
+           
 
 		    //Obtener tablas de bd subida
+           
+           
+           
 		    $resultado = $conexionBD->query ("select name from sqlite_master WHERE type='table' ORDER BY name");
 		    $nombresTablas = array();
 		    while($row = $resultado->fetchArray()){
 		    	$nombresTablas[] = $row["name"];
 		    }
+        
 
 		    //Obtener tablas de master
-		    $conexionBDMaestro = new \SQLite3("F:\\laragon\\www\\memba\\database\\bd-sqlite-maestro.db",SQLITE3_OPEN_READWRITE );
+		    $conexionBDMaestro = new \SQLite3("c:\\laragon\\www\\proyecto-memba\\database\\bd-sqlite-maestro.db",SQLITE3_OPEN_READWRITE );
 		    $resultado = $conexionBDMaestro->query ("select name from sqlite_master WHERE type='table' ORDER BY name");
 		    $nombresTablasMaster = array();
 		    while($row = $resultado->fetchArray()){
 		    	$nombresTablasMaster[] = $row["name"];
 		    }
 
+           
 		    //compara nombre tablas
 		    $nombresTablasAmbos = array();
 		    for($i=0;$i<count($nombresTablasMaster);$i++){
 		    	if(!in_array($nombresTablasMaster[$i], $nombresTablas)){
-		    		$errores .= "La BD no tiene la tabla '".$nombresTablasMaster[$i]."'<br>";
+		    		$errores .= " TABLAS FALTANTES: La BD no tiene la tabla '".$nombresTablasMaster[$i]."'<br>";
 				}else{
 					$nombresTablasAmbos[] = $nombresTablasMaster[$i];
 				}
@@ -73,7 +79,7 @@ class StorageController extends Controller
 
 		  		for($j=0;$j<count($nombresCamposMaster);$j++){
 		  			if(!in_array($nombresCamposMaster[$j], $nombresCampos)){
-		  				$errores .= "La tabla '".$nombresTablasAmbos[$i]."'' le falta el campo '".$nombresCamposMaster[$j]."'<br>";
+		  				$errores .= " CAMPOS FALTANTES: La tabla '".$nombresTablasAmbos[$i]."'' le falta el campo '".$nombresCamposMaster[$j]."'<br>";
 		  			}else{
 		  				$nombresCamposAmbos[] = $nombresCamposMaster[$j];
 		  			}
@@ -81,7 +87,7 @@ class StorageController extends Controller
 		  		for($j=0;$j<count($nombresCamposAmbos);$j++){
 		  			$n = $nombresCamposAmbos[$j];
 		  			if($tiposCamposMaster[$n] != $tiposCampos[$n]){
-		  				$errores .= "En la tabla '".$nombresTablasAmbos[$i]."', el campo '".$n."' tiene un tipo diferente. Esperado: '".$tiposCamposMaster[$n]."', actual: '".$tiposCampos[$n]."' <br>";
+		  				$errores .= "CAMPOS DIFERENTES: En la tabla '".$nombresTablasAmbos[$i]."', el campo '".$n."' tiene un tipo diferente. Esperado: '".$tiposCamposMaster[$n]."', actual: '".$tiposCampos[$n]."' <br>";
 		  			}
 		  		}
 
@@ -107,23 +113,63 @@ class StorageController extends Controller
 		    $nombresIndicesAmbos = array();
 		    for($i=0;$i<count($nombresIndicesMaster);$i++){
 		    	if(!in_array($nombresIndicesMaster[$i], $nombresIndices)){
-		    		$errores .= "La BD no tiene el indice '".$nombresIndicesMaster[$i]."'<br>";
+		    		$errores .= "INDICES : La BD no tiene el indice '".$nombresIndicesMaster[$i]."'<br>";
 				}else{
 					$nombresIndicesAmbos[] = $nombresIndicesMaster[$i];
 				}
 		    }
-
-		    $status = $errores;
-		    return view('inicio')->with('status', $status);
-  		}catch (\Exception  $e){
-  			$status = 'No es SQLite: ';
-  			return view('inicio')->with('status', $status);
-  		}
-
-
-
-
-
+           
+           
+           $resultadomaestro = $conexionBDMaestro->query("select clave,valor from preferencias WHERE clave like 'beeorder%'");
+           $resultado = $conexionBD->query ("select clave,valor from preferencias WHERE clave like 'beeorder%'");
+           $beeordermaestro = array();
+           $beeorder = array();
+           $beeordermaestrovalor = array();
+           $beeordervalor = array();
+           
+           
+           while($row = $resultadomaestro->fetchArray()){
+               $beeordermaestro[] = $row["clave"];
+               $beeordermaestrovalor[$row["clave"]] = $row["valor"];
+               
+           }
+           
+           while($row = $resultado->fetchArray()){
+               $beeorder[] = $row["clave"];
+               $beeordervalor[$row["clave"]] = $row["valor"];
+           }
+           
+           $beeOrderAmbos = array();
+           for($i=0;$i<count($beeordermaestro);$i++){
+               if(!in_array($beeordermaestro[$i], $beeorder)){
+                   $errores .= "La tabla preferencias no tiene el registro '".$beeordermaestro[$i]."'<br>";
+                   
+               }else{
+                   $beeOrderAmbos[] = $beeordermaestro[$i];
+               }
+           }
+           
+           
+           for($j=0;$j<count($beeOrderAmbos);$j++){
+               $n = $beeOrderAmbos[$j];
+               if($beeordermaestrovalor[$n] != $beeordervalor[$n]){
+                   $errores .= "En la tabla 'preferencias', el registro beeorder '".$n."'tiene un valor diferente. Esperando: '".$beeordermaestrovalor[$n]."', actual: '".$beeordervalor[$n]."' <br>";
+               }
+           }
+            
+           
+         $status = $errores;
+             return view('inicio')->with('status', $status);
+           
+        
+        $errores = "";
+         
+  		} catch (\Exception  $e) {
+            $mensajeno = "";
+            $mensajeno = " El archivo no es SQLite";
+  			return view('inicio')->with('mensajeno', $mensajeno);
+  		} 
+     
 
 	}
 
